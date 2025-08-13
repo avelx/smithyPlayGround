@@ -18,7 +18,7 @@ operation GetCountry {
     output: Country
 }
 
-@http(method: "GET", uri: "/countries", code: 200)
+@http(method: "GET", uri: "/country/all", code: 200)
 operation GetCountries {
     output: Countries
 }
