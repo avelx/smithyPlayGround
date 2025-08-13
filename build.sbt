@@ -26,4 +26,6 @@ val example = project
       "org.tpolecat" %% "doobie-postgres"  % doobieVersion,
     )
   )
-
+  .settings(
+    Compile / run / fork := true
+  )

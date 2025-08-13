@@ -1,22 +1,21 @@
 package services
 
 import cats.effect.{IO, Resource}
+import cats.implicits._
+import doobie.implicits._
 import doobie.util.transactor.Transactor.Aux
+import doobie.{ConnectionIO, Transactor}
 import org.http4s.HttpRoutes
-import smithy4s.country.{Country, CountryService}
-import smithy4s.http4s.SimpleRestJsonBuilder
-import smithy4s.country._
+import smithy4s.example
+import smithy4s.example._
+
 import cats.effect._
 import cats.implicits._
 import org.http4s.implicits._
 import org.http4s.ember.server._
 import org.http4s._
 import com.comcast.ip4s._
-import doobie.implicits.toSqlInterpolator
-import doobie.{ConnectionIO, Transactor}
-import doobie.util.transactor.Transactor.Aux
 import smithy4s.http4s.SimpleRestJsonBuilder
-import doobie.implicits._
 
 object CountryImpl extends CountryService[IO] {
 
@@ -32,13 +31,13 @@ object CountryImpl extends CountryService[IO] {
     )
   }
 
-  def find(name: String): ConnectionIO[Option[Country]] =
-    sql"select code, name from country where name = $name".query[Country].option
+  def find(code: String): ConnectionIO[Option[Country]] =
+    sql"select code, name from country where code = $code".query[Country].option
 
-  def countryOps(name: String): IO[Country] = {
+  def getCountry(code: String): IO[Country] = {
     transactor.use { conn =>
       for {
-        country <- find(name).transact(conn)
+        country <- find(code).transact(conn)
       } yield country.get // or throw Error
     }
   }
