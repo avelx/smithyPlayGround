@@ -4,15 +4,9 @@ ThisBuild / version := "0.1.0-SNAPSHOT"
 
 ThisBuild / scalaVersion := "2.13.16"
 
-lazy val root = (project in file("."))
-  .settings(
-    name := "smithyPlayGround"
-  )
-
 lazy val doobieVersion = "1.0.0-RC8"
 
-val example = project
-  .in(file("modules/example"))
+lazy val root = (project in file("."))
   .enablePlugins(Smithy4sCodegenPlugin)
   .settings(
     libraryDependencies ++= Seq(
@@ -29,3 +23,6 @@ val example = project
   .settings(
     Compile / run / fork := true
   )
+
+
+
