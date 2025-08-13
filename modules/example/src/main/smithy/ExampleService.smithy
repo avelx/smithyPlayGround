@@ -2,16 +2,25 @@ namespace smithy4s.example
 
 use alloy#simpleRestJson
 
+list CountryList {
+    member: Country
+}
+
 @simpleRestJson
 service CountryService {
   version: "1.0.0",
-  operations: [GetCountry]
+  operations: [GetCountry, GetCountries]
 }
 
 @http(method: "GET", uri: "/country/{code}", code: 200)
 operation GetCountry {
-  input: Code,
-  output: Country
+    input: Code,
+    output: Country
+}
+
+@http(method: "GET", uri: "/countries", code: 200)
+operation GetCountries {
+    output: Countries
 }
 
 structure Code {
@@ -26,4 +35,9 @@ structure Country{
 
   @required
   name: String
+}
+
+structure Countries{
+    @required
+    countries: CountryList
 }

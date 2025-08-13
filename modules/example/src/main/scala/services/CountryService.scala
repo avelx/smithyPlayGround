@@ -34,6 +34,17 @@ object CountryImpl extends CountryService[IO] {
   def find(code: String): ConnectionIO[Option[Country]] =
     sql"select code, name from country where code = $code".query[Country].option
 
+  def getAll: ConnectionIO[List[Country]] =
+    sql"select code, name from country".query[Country].to[List]
+
+  def getCountries: IO[Countries] = {
+    transactor.use { conn =>
+      for {
+        countries <- getAll.transact(conn)
+      } yield Countries( countries )// or throw Error
+    }
+  }
+
   def getCountry(code: String): IO[Country] = {
     transactor.use { conn =>
       for {
